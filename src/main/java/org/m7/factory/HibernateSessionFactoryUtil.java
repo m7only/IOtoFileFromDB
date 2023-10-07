@@ -7,7 +7,9 @@ import org.m7.entity.Customer;
 import org.m7.entity.Product;
 import org.m7.entity.Purchase;
 
-
+/**
+ * Класс для создания и хранения сессии подключения к БД
+ */
 public class HibernateSessionFactoryUtil {
     private static SessionFactory sessionFactory;
 
@@ -15,6 +17,10 @@ public class HibernateSessionFactoryUtil {
 
     }
 
+    /**
+     * Создание и конфигурирование сессии
+     * @return SessionFactory
+     */
     public static SessionFactory getSessionFactory() {
         if (sessionFactory == null) {
             try {

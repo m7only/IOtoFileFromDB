@@ -5,6 +5,9 @@ import lombok.*;
 
 import java.util.Set;
 
+/**
+ * Сущность покупателя
+ */
 @Entity
 @Table(name = "customers")
 @Data
