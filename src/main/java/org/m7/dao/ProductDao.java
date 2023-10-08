@@ -1,7 +1,7 @@
 package org.m7.dao;
 
 import org.m7.dao.impl.DaoImpl;
-import org.m7.entity.Product;
+import org.m7.model.entity.Product;
 
 /**
  * DAO для товара

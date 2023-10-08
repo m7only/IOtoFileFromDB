@@ -1,4 +1,4 @@
-package org.m7.entity;
+package org.m7.model.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

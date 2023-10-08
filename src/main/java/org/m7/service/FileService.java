@@ -5,6 +5,6 @@ import java.util.Optional;
 
 public interface FileService {
     Path save(String data, Path path);
-    Optional<String> read(Path path);
+    String read(Path path);
 
 }

@@ -3,9 +3,9 @@ package org.m7.factory;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
-import org.m7.entity.Customer;
-import org.m7.entity.Product;
-import org.m7.entity.Purchase;
+import org.m7.model.entity.Customer;
+import org.m7.model.entity.Product;
+import org.m7.model.entity.Purchase;
 
 /**
  * Класс для создания и хранения сессии подключения к БД
