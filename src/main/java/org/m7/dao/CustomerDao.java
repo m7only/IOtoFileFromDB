@@ -5,7 +5,6 @@ import org.m7.dao.impl.DaoImpl;
 import org.m7.factory.HibernateSessionFactoryUtil;
 import org.m7.model.entity.Customer;
 
-import java.time.LocalDate;
 import java.util.List;
 
 /**

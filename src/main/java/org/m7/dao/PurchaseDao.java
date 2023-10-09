@@ -19,17 +19,15 @@ public class PurchaseDao extends DaoImpl<Purchase> {
 
     public List<Customer> getStat(LocalDate startDate, LocalDate endDate) {
         try (Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession()) {
-            List<Customer> customers = session
-                    .createQuery("from Customer as c " +
-                                    "inner join fetch Purchase as p on c.id = p.customer.id " +
+            return session
+                    .createQuery("select new Customer(c.firstName, c.lastName, new list(new Purchase(new Product(pr.productName, sum(pr.price)))))" +
+                                    "from Customer as c " +
+                                    "left join fetch Purchase as p on c.id = p.customer.id " +
                                     "inner join fetch Product as pr on pr.id = p.product.id " +
                                     "where p.purchaseDate >='" + startDate.atStartOfDay() + "' and p.purchaseDate <= '" + endDate.plusDays(1).atStartOfDay() + "' " +
-                                    "group by c.id",
+                                    "group by c.id, pr.id order by sum(pr.price) desc",
                             Customer.class)
                     .list();
-
-            customers.forEach(customer -> customer.getPurchases().forEach(Purchase::getProduct));
-            return customers;
         }
     }
 }

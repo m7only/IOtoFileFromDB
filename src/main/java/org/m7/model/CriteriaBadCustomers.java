@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class CriteriaBadCustomers extends Criteria{
+public class CriteriaBadCustomers extends Criteria {
 
 
     private Integer badCustomers;

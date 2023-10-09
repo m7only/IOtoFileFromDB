@@ -6,9 +6,6 @@ create table customers
     lastname  varchar(255)
 );
 
-alter table customers
-    owner to postgres;
-
 create table products
 (
     id          bigserial
@@ -16,9 +13,6 @@ create table products
     price       integer,
     productname varchar(255)
 );
-
-alter table products
-    owner to postgres;
 
 create table purchases
 (
@@ -32,6 +26,3 @@ create table purchases
         constraint fkcacbvw28fu31rv1vrhnkcbe28
             references products
 );
-
-alter table purchases
-    owner to postgres;

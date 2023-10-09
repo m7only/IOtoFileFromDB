@@ -8,14 +8,20 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.m7.dao.PurchaseDao;
+import org.m7.dto.PurchaseDto;
 import org.m7.dto.StatDto;
 import org.m7.model.Criteria;
 import org.m7.model.entity.Customer;
 import org.m7.service.StatService;
+import org.m7.util.SumAvg;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class StatServiceImpl implements StatService {
 
@@ -33,48 +39,40 @@ public class StatServiceImpl implements StatService {
         result.put("type", "stat");
         result.put("totalDays", statDto.getStartDate().until(statDto.getEndDate(), ChronoUnit.DAYS));
         ArrayNode resultNode = result.putArray("customers");
-
-        List<Customer> customers = purchaseDao.getStat(statDto.getStartDate(), statDto.getEndDate());
-        //purchases.stream().map(purchase -> purchase.getId())
-        for (Customer customer : customers) {
-            System.out.println(customer.getPurchases());
+        List<Customer> customerStatDto = purchaseDao.getStat(statDto.getStartDate(), statDto.getEndDate());
+        Set<String> names = customerStatDto.stream()
+                .map(customer -> customer.getFirstName() + " " + customer.getLastName())
+                .collect(Collectors.toSet());
+        SumAvg totalSum = new SumAvg();
+        for (String name : names) {
+            SumAvg customerSum = new SumAvg();
+            ObjectNode customerNode = objectMapper.createObjectNode();
+            customerNode.put("name", name);
+            ArrayNode customerPurchases = customerNode.putArray("purchases");
+            customerStatDto.stream()
+                    .filter(customer ->
+                            name.equals(customer.getFirstName() + " " + customer.getLastName()))
+                    .forEach(customer ->
+                            customer.getPurchases()
+                                    .forEach(purchase -> {
+                                        customerPurchases.addPOJO(
+                                                new PurchaseDto(
+                                                        purchase.getProduct().getProductName(),
+                                                        purchase.getProduct().getPrice()
+                                                ));
+                                        customerSum.add(purchase.getProduct().getPrice());
+                                    }));
+            customerNode.put("totalExpenses", customerSum.getSum());
+            resultNode.add(customerNode);
+            totalSum.add(customerSum.getSum());
         }
-
-//        List<CustomerDto> customerDtoList =
-//                customerDao
-//                        .findByLastName(((CriteriaLastName) criteria).getLastName())
-//                        .stream()
-//                        .map(customer -> new CustomerDto(
-//                                customer.getFirstName(),
-//                                customer.getLastName()))
-//                        .collect(Collectors.toList());
-//        criteriaResultNode.putPOJO("results", customerDtoList);
-//        return criteriaResultNode;
-
-
-//        List<Criteria> criterias = parseCriterias(read);
-//        Iterator<Criteria> iterator = criterias.iterator();
-//        while (iterator.hasNext()) {
-//            Criteria criteria = iterator.next();
-//            ObjectNode criteriaResultNode = objectMapper.createObjectNode();
-//            criteriaResultNode.putPOJO("criteria", criteria);
-//            if (criteria instanceof CriteriaLastName) {
-//                resultNode.add(getNodeByLastName(criteria, criteriaResultNode));
-//            }
-//            if (criteria instanceof CriteriaBadCustomers) {
-//                resultNode.add(getNodeByBadCustomers(criteria, criteriaResultNode));
-//            }
-//            if (criteria instanceof CriteriaMinMaxExpenses) {
-//                resultNode.add(getNodeByMinMaxExpenses(criteria, criteriaResultNode));
-//            }
-//            if (criteria instanceof CriteriaProductTimes) {
-//                resultNode.add(getNodeByProductTimes(criteria, criteriaResultNode));
-//            }
-//        }
+        result.put("totalExpenses", totalSum.getSum());
+        result.put("avgExpenses", BigDecimal.valueOf(totalSum.getAvg()).setScale(2, RoundingMode.HALF_UP));
         try {
             res = objectMapper.writeValueAsString(result);
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            ApplicationServiceImpl.error("Внутренняя ошибка приложения");
         }
         return res;
     }
@@ -85,14 +83,12 @@ public class StatServiceImpl implements StatService {
         try {
             JsonNode nodes = objectMapper.readTree(read);
             if (!nodes.has(NODE_START_DATE) || !nodes.has(NODE_END_DATE)) {
-                //error
-                System.out.println("error1");
+                ApplicationServiceImpl.error("Отсутствует одна из дат");
             }
             statDto = objectMapper.readValue(read, StatDto.class);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
-            //error
-            System.out.println("error2");
+            ApplicationServiceImpl.error("JSON не распознан");
         }
         return statDto;
     }

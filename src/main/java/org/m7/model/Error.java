@@ -10,4 +10,12 @@ public class Error {
     public Error(String message) {
         this.message = message;
     }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "\"type\": \"" + type + "\"," +
+                "\"message\": \"" + message + "\"" +
+                '}';
+    }
 }

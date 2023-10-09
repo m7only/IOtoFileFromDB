@@ -1,5 +1,6 @@
 package org.m7.service.impl;
 
+import org.m7.model.Error;
 import org.m7.model.Operation;
 import org.m7.service.ApplicationService;
 import org.m7.service.FileService;
@@ -10,9 +11,14 @@ import java.nio.file.Paths;
 
 public class ApplicationServiceImpl implements ApplicationService {
 
+    private final static FileService fileService = new FileServiceImpl();
+    private static String inputFile;
+    private static String outputFile;
     private Operation operation;
-    private String inputFile;
-    private String outputFile;
+
+    public static void error(String message) {
+        fileService.save(new Error(message).toString(), Paths.get(outputFile));
+    }
 
     @Override
     public void parse(String[] args) {
@@ -38,7 +44,6 @@ public class ApplicationServiceImpl implements ApplicationService {
 
     @Override
     public void search() {
-        FileService fileService = new FileServiceImpl();
         SearchService searchService = new SearchServiceImpl();
         fileService.save(
                 searchService.search(fileService.read(Paths.get(inputFile))),
@@ -48,7 +53,6 @@ public class ApplicationServiceImpl implements ApplicationService {
 
     @Override
     public void stat() {
-        FileService fileService = new FileServiceImpl();
         StatService statService = new StatServiceImpl();
         fileService.save(
                 statService.stat(fileService.read(Paths.get(inputFile))),

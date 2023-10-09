@@ -30,4 +30,8 @@ public class Product {
     @ToString.Exclude
     private Set<Purchase> purchases;
 
+    public Product(String productName, Long price) {
+        this.productName = productName;
+        this.price = price.intValue();
+    }
 }

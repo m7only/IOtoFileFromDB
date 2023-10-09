@@ -6,8 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.m7.dao.CustomerDao;
-import org.m7.dao.ProductDao;
-import org.m7.dao.PurchaseDao;
 import org.m7.dto.CustomerDto;
 import org.m7.model.*;
 import org.m7.service.SearchService;
@@ -60,7 +58,8 @@ public class SearchServiceImpl implements SearchService {
         try {
             res = objectMapper.writeValueAsString(result);
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            ApplicationServiceImpl.error("Внутренняя ошибка приложения");
         }
         return res;
     }
@@ -128,8 +127,7 @@ public class SearchServiceImpl implements SearchService {
         try {
             JsonNode nodes = objectMapper.readTree(read);
             if (!nodes.has(CRITERIA_TITLE) || !nodes.get(CRITERIA_TITLE).isArray()) {
-                //error
-                System.out.println("error");
+                ApplicationServiceImpl.error("Критерии поиска не распознаны");
             }
             JsonNode arrayNode = nodes.get(CRITERIA_TITLE);
             Iterator<JsonNode> iterator = arrayNode.elements();
@@ -155,8 +153,8 @@ public class SearchServiceImpl implements SearchService {
                 }
             }
         } catch (JsonProcessingException e) {
-            //error
-            System.out.println("error");
+            e.printStackTrace();
+            ApplicationServiceImpl.error("Критерии поиска не распознаны");
         }
         return criterias;
     }
