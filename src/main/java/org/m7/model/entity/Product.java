@@ -1,4 +1,4 @@
-package org.m7.entity;
+package org.m7.model.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -30,4 +30,8 @@ public class Product {
     @ToString.Exclude
     private Set<Purchase> purchases;
 
+    public Product(String productName, Long price) {
+        this.productName = productName;
+        this.price = price.intValue();
+    }
 }

@@ -9,6 +9,7 @@ import java.util.List;
 
 /**
  * Реализация общих методов (по сути CRUD) для всех сущностей
+ *
  * @param <T> Сущность, для которой создается DAO
  */
 public abstract class DaoImpl<T> implements Dao<T> {

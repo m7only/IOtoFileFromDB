@@ -1,4 +1,4 @@
-package org.m7.entity;
+package org.m7.model.entity;
 
 
 import jakarta.persistence.*;
@@ -29,4 +29,16 @@ public class Purchase {
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Product product;
+
+//    c.lastName, c.firstName, pr.productName, sum(pr.price)
+
+
+    public Purchase(Customer customer, Product product) {
+        this.customer = customer;
+        this.product = product;
+    }
+
+    public Purchase(Product product) {
+        this.product = product;
+    }
 }

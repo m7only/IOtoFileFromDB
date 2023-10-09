@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Optional;
 
 public class FileServiceImpl implements FileService {
 
@@ -34,12 +33,12 @@ public class FileServiceImpl implements FileService {
      * @return {@code Optional<String>} текст из файла
      */
     @Override
-    public Optional<String> read(Path path) {
+    public String read(Path path) {
         try {
-            return Optional.of(new String(Files.readAllBytes(path), StandardCharsets.UTF_8));
+            return new String(Files.readAllBytes(path), StandardCharsets.UTF_8);
         } catch (IOException e) {
             e.printStackTrace();
-            return Optional.empty();
+            return null;
         }
     }
 }

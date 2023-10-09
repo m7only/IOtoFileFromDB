@@ -1,9 +1,9 @@
-package org.m7.entity;
+package org.m7.model.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Set;
+import java.util.List;
 
 /**
  * Сущность покупателя
@@ -28,5 +28,16 @@ public class Customer {
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    private Set<Purchase> purchases;
+    private List<Purchase> purchases;
+
+    public Customer(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
+    public Customer(String firstName, String lastName, List<Purchase> purchases) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.purchases = purchases;
+    }
 }
