@@ -1,0 +1,10 @@
+INSERT INTO public.purchases (id, purchasedate, customer_id, product_id) VALUES (7, '2023-10-08 19:38:08.000000', 2, 5);
+INSERT INTO public.purchases (id, purchasedate, customer_id, product_id) VALUES (8, '2023-10-07 19:38:13.000000', 2, 5);
+INSERT INTO public.purchases (id, purchasedate, customer_id, product_id) VALUES (9, '2023-10-07 19:38:22.000000', 2, 6);
+INSERT INTO public.purchases (id, purchasedate, customer_id, product_id) VALUES (11, '2023-10-08 19:38:34.000000', 2, 5);
+INSERT INTO public.purchases (id, purchasedate, customer_id, product_id) VALUES (12, '2023-10-08 19:38:35.000000', 3, 12);
+INSERT INTO public.purchases (id, purchasedate, customer_id, product_id) VALUES (15, '2023-10-08 19:38:40.000000', 2, 5);
+INSERT INTO public.purchases (id, purchasedate, customer_id, product_id) VALUES (16, '2023-10-08 19:38:41.000000', 2, 5);
+INSERT INTO public.purchases (id, purchasedate, customer_id, product_id) VALUES (14, '2023-10-06 19:38:36.000000', 3, 12);
+INSERT INTO public.purchases (id, purchasedate, customer_id, product_id) VALUES (13, '2023-10-06 19:38:37.000000', 4, 12);
+INSERT INTO public.purchases (id, purchasedate, customer_id, product_id) VALUES (10, '2023-10-05 19:38:29.000000', 2, 6);
